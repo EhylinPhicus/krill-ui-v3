@@ -7,10 +7,25 @@ export {}
 /* prettier-ignore */
 declare module 'vue' {
   export interface GlobalComponents {
+    AppBar: typeof import('./components/layout/AppBar.vue')['default']
+    AppDrawer: typeof import('./components/layout/AppDrawer.vue')['default']
+    AppDrawerItem: typeof import('./components/layout/AppDrawerItem.vue')['default']
+    AppFooter: typeof import('./components/layout/AppFooter.vue')['default']
+    AppNotification: typeof import('./components/layout/AppNotification.vue')['default']
+    AppNotificationItem: typeof import('./components/layout/AppNotificationItem.vue')['default']
+    ButtonSettings: typeof import('./components/layout/ButtonSettings.vue')['default']
+    ChartBar: typeof import('./components/demo-charts/ChartBar.vue')['default']
+    ChartLine: typeof import('./components/demo-charts/ChartLine.vue')['default']
+    ChartLIne: typeof import('./components/demo-charts/ChartLIne.vue')['default']
+    ChartPie: typeof import('./components/demo-charts/ChartPie.vue')['default']
+    ChartPIe: typeof import('./components/demo-charts/ChartPIe.vue')['default']
+    ChartRadar: typeof import('./components/demo-charts/ChartRadar.vue')['default']
     DialogConfirm: typeof import('./components/DialogConfirm.vue')['default']
     HelloWorld: typeof import('./components/HelloWorld.vue')['default']
     RouterLink: typeof import('vue-router')['RouterLink']
     RouterView: typeof import('vue-router')['RouterView']
+    RouterWrapper: typeof import('./components/layout/RouterWrapper.vue')['default']
+    StatsCard: typeof import('./components/StatsCard.vue')['default']
     Table: typeof import('./components/table.vue')['default']
   }
 }

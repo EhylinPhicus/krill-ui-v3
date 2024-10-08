@@ -1,6 +1,7 @@
 import 'vuetify/styles'
 import { createVuetify, type IconSet, type IconProps } from 'vuetify'
 import { aliases, mdi } from 'vuetify/iconsets/mdi-svg'
+import { md3 } from 'vuetify/blueprints'
 import * as components from 'vuetify/components'
 import * as directives from 'vuetify/directives'
 import colors from '../config/colors'
@@ -30,6 +31,7 @@ const custom: IconSet = {
 }
 
 export default createVuetify({
+  blueprint: md3,
   components,
   directives,
   icons: {

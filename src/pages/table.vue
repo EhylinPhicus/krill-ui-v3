@@ -1,7 +1,16 @@
 <script setup lang="ts">
-import DialogConfirm from './DialogConfirm.vue'
+import DialogConfirm from '@/components/DialogConfirm.vue'
 import type { DataTableHeaders } from '@/plugins/vuetify'
 
+definePage({
+  meta: {
+    icon: 'mdi-table',
+    title: 'Data Table',
+    drawerIndex: 3
+  }
+})
+
+const search = ref('')
 const dialogDelete = ref<InstanceType<typeof DialogConfirm> | null>(null)
 function showDialogDelete(name: string) {
   dialogDelete.value
@@ -128,7 +137,23 @@ const desserts = ref([
     <v-row>
       <v-col>
         <v-card>
-          <v-data-table :headers="headers" :items="desserts" item-value="name">
+          <teleport to="#app-bar">
+            <v-text-field
+              v-model="search"
+              prepend-inner-icon="mdi-magnify"
+              label="Search"
+              single-line
+              hide-details
+              density="compact"
+              class="mr-2"
+              rounded="xl"
+              flat
+              variant="solo"
+              style="width: 250px"
+            />
+          </teleport>
+
+          <v-data-table :headers="headers" :items="desserts" item-value="name" :search="search">
             <template #item.actions="{ item }">
               <v-defaults-provider
                 :defaults="{
@@ -146,11 +171,13 @@ const desserts = ref([
               >
                 <v-tooltip location="top">
                   <template #activator="{ props }">
-                    <v-btn v-bind="props" @click.stop="showDialogDelete(item.name)">
-                      ELiminar
-                    </v-btn>
+                    <v-btn
+                      icon="mdi-delete-outline"
+                      v-bind="props"
+                      @click.stop="showDialogDelete(item.name)"
+                    />
                   </template>
-                  <span>ELiminar</span>
+                  <span>Delete</span>
                 </v-tooltip>
               </v-defaults-provider>
             </template>
