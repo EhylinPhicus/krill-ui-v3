@@ -1,12 +1,39 @@
 <template>
   <v-container>
     <v-card>
-      <v-data-table :headers="headers" :items="data" :items-per-page="5" class="elevation-1">
+      <v-data-table
+        :headers="headers"
+        :items="data"
+        :items-per-page="5"
+        class="elevation-1"
+        v-model:select="selected"
+        item-value="username"
+        show-select
+        select-all
+      >
+        <template v-slot:item.krillcpename="{ item }">
+          <v-btn x-small v-if="item.krillcpename">
+            <v-icon small color="primary" left>mdi-eye</v-icon>
+            {{ item.krillcpename }}
+          </v-btn>
+        </template>
+
         <template v-slot:item.acctstarttime="{ item }">
           <span>{{ formatDate(item.acctstarttime) }}</span>
         </template>
+
         <template v-slot:item.actions="{ item }">
-          <v-btn color="error" @click="deauthConfirmation(item)"> Deauth </v-btn>
+          <v-btn
+            small
+            color="error"
+            class="mr-2"
+            @click="deauthConfirmation(item)"
+            :loading="deauthing.includes(item.acctuniqueid)"
+            :disabled="deauthing.includes(item.acctuniqueid)"
+          >
+            <v-icon small left>mdi-exit-to-app</v-icon>
+            {{ $t('oratio.radius_view.button_deauth') }}...
+          </v-btn>
         </template>
       </v-data-table>
 
@@ -35,40 +62,64 @@ definePage({
     drawerIndex: 4
   }
 })
+
 import type { DataTableHeaders } from '@/plugins/vuetify'
+import DialogConfirm from '@/components/DialogConfirm.vue'
 import { ref, onMounted } from 'vue'
 import axios from 'axios'
 import { useI18n } from 'vue-i18n'
 
+// Definición de tipo para los ítems
 interface SessionItem {
   krillcpename: string
   username: string
   callingstationid: string
   nasipaddress: string
   framedipaddress: string
-  acctstarttime: string // Puedes usar Date si prefieres manejarlo como un objeto de fecha
+  acctstarttime: string
 }
 
+// Variables reactivas
 const loading = ref(false)
 const error = ref(false)
-const data = ref([])
+const data = ref<SessionItem[]>([])
+const selected = ref<SessionItem[]>([]) // Para almacenar ítems seleccionados
 const { t, locale } = useI18n()
 
+// Encabezados de la tabla
 const headers: DataTableHeaders = [
   {
     title: t('oratio.radius_view.headers.sessions.krillcpename'),
-    key: 'krillcpename'
+    key: 'krillcpename',
+    align: 'start'
   },
   {
     title: t('oratio.radius_view.headers.sessions.username'),
-    key: 'username'
+    key: 'username',
+    align: 'end'
   },
-  { title: t('oratio.radius_view.headers.sessions.callingstationid'), key: 'callingstationid' },
-  { title: t('oratio.radius_view.headers.sessions.nasipaddress'), key: 'nasipaddress' },
-
-  { title: t('oratio.radius_view.headers.sessions.framedipaddress'), key: 'framedipaddress' },
-  { title: 'Inicio', key: 'acctstarttime' },
-  { title: t('oratio.radius_view.headers.sessions.actions'), key: 'actions', sortable: false }
+  {
+    title: t('oratio.radius_view.headers.sessions.callingstationid'),
+    key: 'callingstationid',
+    align: 'start'
+  },
+  {
+    title: t('oratio.radius_view.headers.sessions.nasipaddress'),
+    key: 'nasipaddress',
+    align: 'start'
+  },
+  {
+    title: t('oratio.radius_view.headers.sessions.framedipaddress'),
+    key: 'framedipaddress',
+    align: 'start'
+  },
+  { title: 'Inicio', key: 'acctstarttime', align: 'end' },
+  {
+    title: t('oratio.radius_view.headers.sessions.actions'),
+    key: 'actions',
+    sortable: false,
+    align: 'end'
+  }
 ]
 
 const apiUrl =
@@ -83,31 +134,45 @@ async function fetchData() {
     data.value = response.data.results || []
   } catch (err) {
     console.error(err)
-    error.value = true // Cambia el estado de error a verdadero
+    error.value = true
   } finally {
-    loading.value = false // Siempre se ejecuta al final
+    loading.value = false
   }
 }
 
 // Función para refrescar los datos
 function refresh() {
-  fetchData() // Llama a la función para obtener datos
+  fetchData()
 }
 
 // Función para formatear fechas
-function formatDate(date: string) {
-  return new Date(date).toLocaleString() // Formatear según sea necesario
+function formatDate(date: string): string {
+  return new Date(date).toLocaleString()
 }
 
 // Función de desautenticación (placeholder)
-function deauthConfirmation(item: SessionItem) {
-  console.log('Deauth item:', item) // Implementar la lógica de desautenticación
-  // Aquí podrías hacer una solicitud para desautenticar al usuario
+//   function deauthConfirmation(item: SessionItem): void {
+//     console.log('Deauth item:', item);
+//   }
+
+const dialogDelete = ref<InstanceType<typeof DialogConfirm> | null>(null)
+function deauthConfirmation(name: string) {
+  dialogDelete.value
+    ?.open('Are you sure you want to delete this dessert?')
+    .then(async (confirmed: boolean) => {
+      if (confirmed) {
+        try {
+          Notify.success('Deleted')
+        } catch (e) {
+          Notify.error(e)
+        }
+      }
+    })
 }
 
 // Cargar datos al montar el componente
 onMounted(() => {
-  fetchData() // Llama a la función para obtener datos al montar el componente
+  fetchData()
 })
 </script>
 
