@@ -1,6 +1,7 @@
 <script setup lang="ts">
 const { drawer } = storeToRefs(useAppStore())
 const route = useRoute()
+
 const breadcrumbs = computed(() => {
   return route!.matched
     .slice(1)
@@ -20,6 +21,8 @@ const breadcrumbs = computed(() => {
     <v-spacer />
     <div id="app-bar" />
     <v-spacer />
+    <button @click="changeLanguage('es')">Español</button>
+    <button @click="changeLanguage('en')">English</button>
     <hr />
   </v-app-bar>
 </template>
