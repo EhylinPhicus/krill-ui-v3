@@ -2,12 +2,6 @@
   <v-container>
     <v-card>
       <v-data-table :headers="headers" :items="data" :items-per-page="5" class="elevation-1">
-        <template v-slot:item.acctstarttime="{ item }">
-          <span>{{ formatDate(item.acctstarttime) }}</span>
-        </template>
-        <template v-slot:item.actions="{ item }">
-          <v-btn color="error" @click="deauthConfirmation(item)"> Deauth </v-btn>
-        </template>
       </v-data-table>
 
       <v-progress-linear
@@ -72,17 +66,6 @@ async function fetchData() {
 // Función para refrescar los datos
 function refresh() {
   fetchData() // Llama a la función para obtener datos
-}
-
-// Función para formatear fechas
-function formatDate(date) {
-  return new Date(date).toLocaleString() // Formatear según sea necesario
-}
-
-// Función de desautenticación (placeholder)
-function deauthConfirmation(item) {
-  console.log('Deauth item:', item) // Implementar la lógica de desautenticación
-  // Aquí podrías hacer una solicitud para desautenticar al usuario
 }
 
 // Cargar datos al montar el componente

@@ -1,3 +1,7 @@
+:root {
+  --v-layout-left: 0; /* Ajusta el valor según sea necesario */
+}
+
 html {
   overflow-y: auto;
   background-color: beige;

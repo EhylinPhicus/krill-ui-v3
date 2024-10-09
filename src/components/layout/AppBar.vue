@@ -12,10 +12,12 @@ const breadcrumbs = computed(() => {
       to: r.path
     }))
 })
+// Computed para determinar si el drawer está cerrado
+const isDrawerClosed = computed(() => !drawer.value)
 </script>
 
 <template>
-  <v-app-bar class="dark" flat>
+  <v-app-bar class="dark" :class="{ 'full-width': isDrawerClosed }">
     <v-app-bar-nav-icon @click="drawer = !drawer" />
     <v-breadcrumbs :items="breadcrumbs" />
     <v-spacer />
@@ -34,5 +36,9 @@ const breadcrumbs = computed(() => {
 }
 .dark {
   border-bottom: solid grey 1px;
+}
+.full-width {
+  width: 100% !important; /* Asegúrate de que tome todo el ancho */
+  left: 0 !important;
 }
 </style>

@@ -16,11 +16,11 @@ const drawer = computed({
 const rail = computed(() => !drawerStored.value && !mobile.value)
 routes.sort((a, b) => (a.meta?.drawerIndex ?? 99) - (b.meta?.drawerIndex ?? 98))
 
-drawerStored.value = lgAndUp.value && width.value !== 1280
+drawerStored.value = lgAndUp.value && !drawerStored.value
 </script>
 
 <template>
-  <v-navigation-drawer v-model="drawer" :expand-on-hover="rail" :rail="rail" floating>
+  <v-navigation-drawer v-model="drawer" :rail="rail" floating>
     <template #prepend>
       <v-list>
         <v-list-item class="pa-1">
@@ -56,31 +56,32 @@ drawerStored.value = lgAndUp.value && width.value !== 1280
 </template>
 
 <style>
-.v-navigation-drawer {
+.v-navigation-drawer--rail:not(.v-navigation-drawer--is-hovering) {
+  width: 0 !important;
+}
+
+.v-navigation-drawer--open {
+  width: 300px !important;
+  display: block !important;
+}
+
+/* .v-navigation-drawer {
   transition-property: box-shadow, transform, visibility, width, height, left, right, top, bottom,
     border-radius !important;
   overflow: hidden;
   &.v-navigation-drawer--rail {
     border-top-right-radius: 0px;
     border-bottom-right-radius: 0px;
-    &.v-navigation-drawer--is-hovering {
-      border-top-right-radius: 10px;
-      border-bottom-right-radius: 10px;
-      box-shadow:
-        0px 1px 2px 0px rgb(0 0 0 / 30%),
-        0px 1px 3px 1px rgb(0 0 0 / 15%);
-    }
     &:not(.v-navigation-drawer--is-hovering) {
       .drawer-footer {
         transform: translateX(-160px);
       }
       .drawer-header-icon {
         height: 1em !important;
-        width: 1em !important;
+        width: 0 !important;
       }
       .v-list-group {
-        --list-indent-size: 0px;
-        --prepend-width: 0px;
+        display: none;
       }
     }
   }
@@ -107,5 +108,5 @@ drawerStored.value = lgAndUp.value && width.value !== 1280
   .v-list-item {
     transition: all 0.2s;
   }
-}
+} */
 </style>

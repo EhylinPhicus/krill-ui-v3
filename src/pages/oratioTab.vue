@@ -1,57 +1,67 @@
 <template>
-  <v-container>
-    <v-card>
-      <v-data-table
-        :headers="headers"
-        :items="data"
-        :items-per-page="5"
-        class="elevation-1"
-        v-model:select="selected"
-        item-value="username"
-        show-select
-        select-all
+  <v-data-table
+    :headers="headers"
+    :items="data"
+    :items-per-page="5"
+    class="elevation-1"
+    v-model:select="selected"
+    item-value="username"
+    show-select
+    select-all
+  >
+    <template v-slot:item.krillcpename="{ item }">
+      <v-btn x-small v-if="item.krillcpename">
+        <v-icon small color="primary" left>mdi-eye</v-icon>
+        {{ item.krillcpename }}
+      </v-btn>
+    </template>
+
+    <template v-slot:item.acctstarttime="{ item }">
+      <span>{{ formatDate(item.acctstarttime) }}</span>
+    </template>
+
+    <template #item.actions="{ item }">
+      <v-defaults-provider
+        :defaults="{
+          VBtn: {
+            size: 20,
+            rounded: 'sm',
+            variant: 'text',
+            class: 'ml-1',
+            color: ''
+          },
+          VIcon: {
+            size: 20
+          }
+        }"
       >
-        <template v-slot:item.krillcpename="{ item }">
-          <v-btn x-small v-if="item.krillcpename">
-            <v-icon small color="primary" left>mdi-eye</v-icon>
-            {{ item.krillcpename }}
-          </v-btn>
-        </template>
+        <v-tooltip location="top">
+          <template #activator="{ props }">
+            <v-btn
+              icon="mdi-delete-outline"
+              v-bind="props"
+              @click.stop="deauthConfirmation(item.krillcpename)"
+            />
+          </template>
+          <span>Delete</span>
+        </v-tooltip>
+      </v-defaults-provider>
+    </template>
+  </v-data-table>
 
-        <template v-slot:item.acctstarttime="{ item }">
-          <span>{{ formatDate(item.acctstarttime) }}</span>
-        </template>
+  <v-progress-linear
+    v-if="loading"
+    :active="loading"
+    :indeterminate="loading"
+    color="primary"
+  ></v-progress-linear>
 
-        <template v-slot:item.actions="{ item }">
-          <v-btn
-            small
-            color="error"
-            class="mr-2"
-            @click="deauthConfirmation(item)"
-            :loading="deauthing.includes(item.acctuniqueid)"
-            :disabled="deauthing.includes(item.acctuniqueid)"
-          >
-            <v-icon small left>mdi-exit-to-app</v-icon>
-            {{ $t('oratio.radius_view.button_deauth') }}...
-          </v-btn>
-        </template>
-      </v-data-table>
-
-      <v-progress-linear
-        v-if="loading"
-        :active="loading"
-        :indeterminate="loading"
-        color="primary"
-      ></v-progress-linear>
-
-      <v-card v-if="error" class="mt-5">
-        <v-card-title>Error loading data</v-card-title>
-        <v-card-actions>
-          <v-btn color="error" @click="refresh">Retry</v-btn>
-        </v-card-actions>
-      </v-card>
-    </v-card>
-  </v-container>
+  <v-card v-if="error" class="mt-5">
+    <v-card-title>Error loading data</v-card-title>
+    <v-card-actions>
+      <v-btn color="error" @click="refresh">Retry</v-btn>
+    </v-card-actions>
+  </v-card>
 </template>
 
 <script setup lang="ts">
