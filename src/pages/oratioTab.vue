@@ -10,7 +10,7 @@
     select-all
   >
     <template v-slot:item.krillcpename="{ item }">
-      <v-btn x-small v-if="item.krillcpename">
+      <v-btn class="btn-cpe" x-small v-if="item.krillcpename">
         <v-icon small color="primary" left>mdi-eye</v-icon>
         {{ item.krillcpename }}
       </v-btn>
@@ -38,17 +38,21 @@
         <v-tooltip location="top">
           <template #activator="{ props }">
             <v-btn
-              icon="mdi-delete-outline"
+              small
+              class="button"
               v-bind="props"
               @click.stop="deauthConfirmation(item.krillcpename)"
-            />
+            >
+              <v-icon small left>mdi-exit-to-app</v-icon>
+              <span class="titleButton">{{ $t('oratio.radius_view.button_deauth') }}...</span>
+            </v-btn>
           </template>
-          <span>Delete</span>
+          <span> {{ $t('oratio.radius_view.button_deauth') }}...</span>
         </v-tooltip>
       </v-defaults-provider>
     </template>
   </v-data-table>
-
+  <DialogConfirm ref="dialogDeauthConfirmation" />
   <v-progress-linear
     v-if="loading"
     :active="loading"
@@ -165,14 +169,15 @@ function formatDate(date: string): string {
 //     console.log('Deauth item:', item);
 //   }
 
-const dialogDelete = ref<InstanceType<typeof DialogConfirm> | null>(null)
+const dialogDeauthConfirmation = ref<InstanceType<typeof DialogConfirm> | null>(null)
 function deauthConfirmation(name: string) {
-  dialogDelete.value
+  console.log('entro', dialogDeauthConfirmation)
+  dialogDeauthConfirmation.value
     ?.open('Are you sure you want to delete this dessert?')
     .then(async (confirmed: boolean) => {
       if (confirmed) {
         try {
-          Notify.success('Deleted')
+          Notify.success('NOTI')
         } catch (e) {
           Notify.error(e)
         }
@@ -187,5 +192,16 @@ onMounted(() => {
 </script>
 
 <style scoped>
-/* Estilos personalizados, si es necesario */
+.button {
+  width: auto !important;
+  background: #ff5252;
+  color: white;
+}
+.titleButton {
+  font-size: 12px;
+}
+.btn-cpe {
+  background-color: #f5f5f5;
+  border-radius: 5px !important;
+}
 </style>
