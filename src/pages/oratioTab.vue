@@ -16,6 +16,10 @@
       </v-btn>
     </template>
 
+    <template v-slot:item.callingstationid="{ item }">
+      <span class="bg"> {{ item.callingstationid }}</span>
+    </template>
+
     <template v-slot:item.acctstarttime="{ item }">
       <span>{{ formatDate(item.acctstarttime) }}</span>
     </template>
@@ -43,7 +47,7 @@
               v-bind="props"
               @click.stop="deauthConfirmation(item.krillcpename)"
             >
-              <v-icon small left>mdi-exit-to-app</v-icon>
+              <v-icon class="size" small left>mdi-exit-to-app</v-icon>
               <span class="titleButton">{{ $t('oratio.radius_view.button_deauth') }}...</span>
             </v-btn>
           </template>
@@ -194,14 +198,47 @@ onMounted(() => {
 <style scoped>
 .button {
   width: auto !important;
-  background: #ff5252;
+  height: 26px;
+  padding: 0 9px;
+  font-size: 0.625rem;
+  background-color: #ff5252;
+  border-radius: 3px !important;
   color: white;
 }
 .titleButton {
   font-size: 12px;
+  text-transform: capitalize;
+}
+.bg {
+  background-color: #f5f5f5;
+  padding: 0.2em 0.4em;
 }
 .btn-cpe {
   background-color: #f5f5f5;
   border-radius: 5px !important;
+  font-size: 0.625rem;
+  text-transform: lowercase;
+  font-weight: 700;
+}
+.v-table--density-default {
+  --v-table-header-height: 0px;
+  --v-table-row-height: 0px;
+}
+.v-btn.v-btn--density-default {
+  height: 25px !important;
+}
+.v-btn--size-default {
+  padding: 0 8px;
+}
+.v-data-table > .v-data-table__wrapper > table > tbody > tr > th,
+.v-data-table > .v-data-table__wrapper > table > tfoot > tr > th,
+.v-data-table > .v-data-table__wrapper > table > thead > tr > th {
+  font-size: 0.75rem;
+}
+.v-data-table-footer {
+  font-size: 0.75rem !important;
+}
+.size {
+  font-size: 16px !important;
 }
 </style>
