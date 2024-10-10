@@ -21,13 +21,11 @@ const menuShow = ref(false)
       <v-card-text class="text-center">
         <v-label class="mb-3">Theme Palette</v-label>
         <v-color-picker
-          v-model="color"
           show-swatches
           elevation="0"
           width="288"
           mode="rgb"
           :modes="['rgb', 'hex', 'hsl']"
-          :swatches="colors"
         />
         <v-btn-toggle v-model="store" mandatory class="mt-2" rounded="lg">
           <v-btn prepend-icon="mdi-white-balance-sunny" value="light">Light</v-btn>
